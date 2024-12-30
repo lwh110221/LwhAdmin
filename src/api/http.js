@@ -1,7 +1,7 @@
-import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios'
+import axios from 'axios'
 
 // 创建axios实例
-const http: AxiosInstance = axios.create({
+const http = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
   timeout: 15000,
   headers: {
@@ -11,11 +11,14 @@ const http: AxiosInstance = axios.create({
 
 // 请求拦截器
 http.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
+  (config) => {
     // 在发送请求之前做些什么
     const token = localStorage.getItem('token')
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`
+    if (token) {
+      config.headers = {
+        ...config.headers,
+        Authorization: `Bearer ${token}`
+      }
     }
     return config
   },
@@ -27,7 +30,7 @@ http.interceptors.request.use(
 
 // 响应拦截器
 http.interceptors.response.use(
-  (response: AxiosResponse) => {
+  (response) => {
     // 对响应数据做点什么
     const { data } = response
     return data
@@ -56,4 +59,4 @@ http.interceptors.response.use(
   }
 )
 
-export default http
+export default http 
