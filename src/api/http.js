@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { logger } from '@/utils/logger'
 
 // 创建axios实例
 const http = axios.create({
@@ -20,10 +21,12 @@ http.interceptors.request.use(
         Authorization: `Bearer ${token}`
       }
     }
+    logger.info(`Request: ${config.method?.toUpperCase()} ${config.url}`)
     return config
   },
   (error) => {
     // 对请求错误做些什么
+    logger.error('Request Error:', error)
     return Promise.reject(error)
   }
 )
@@ -33,27 +36,38 @@ http.interceptors.response.use(
   (response) => {
     // 对响应数据做点什么
     const { data } = response
+    logger.info(`Response: ${response.config.method?.toUpperCase()} ${response.config.url} - Status: ${response.status}`)
     return data
   },
   (error) => {
     // 对响应错误做点什么
     if (error.response) {
-      switch (error.response.status) {
+      const { status, config } = error.response
+      logger.error(`API Error: ${config.method?.toUpperCase()} ${config.url} - Status: ${status}`, error)
+      
+      switch (status) {
         case 401:
           // 未授权，跳转到登录页
+          logger.warn('Unauthorized, redirecting to login page')
           break
         case 403:
           // 权限不足
+          logger.warn('Permission denied')
           break
         case 404:
           // 请求不存在
+          logger.warn('Resource not found')
           break
         case 500:
           // 服务器错误
+          logger.error('Server error', error)
           break
         default:
+          logger.error(`Unhandled error status: ${status}`, error)
           break
       }
+    } else {
+      logger.error('Network Error', error)
     }
     return Promise.reject(error)
   }

@@ -27,3 +27,21 @@ npm run dev
 ```sh
 npm run build
 ```
+
+
+日志调用
+```javascript
+import { logger } from '@/utils/logger'
+
+// 记录错误
+logger.error('发生错误', error)
+
+// 记录警告
+logger.warn('警告信息')
+
+// 记录普通信息
+logger.info('操作信息')
+
+```
+
+
