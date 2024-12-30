@@ -1,10 +1,10 @@
 import axios from 'axios'
-import { logger } from '@/utils/logger'
 
 // 创建axios实例
 const http = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 15000,
+  withCredentials: true, // 允许跨域携带cookie
   headers: {
     'Content-Type': 'application/json'
   }
@@ -21,12 +21,11 @@ http.interceptors.request.use(
         Authorization: `Bearer ${token}`
       }
     }
-    logger.info(`Request: ${config.method?.toUpperCase()} ${config.url}`)
     return config
   },
   (error) => {
     // 对请求错误做些什么
-    logger.error('Request Error:', error)
+    console.error('请求错误:', error)
     return Promise.reject(error)
   }
 )
@@ -35,39 +34,37 @@ http.interceptors.request.use(
 http.interceptors.response.use(
   (response) => {
     // 对响应数据做点什么
-    const { data } = response
-    logger.info(`Response: ${response.config.method?.toUpperCase()} ${response.config.url} - Status: ${response.status}`)
-    return data
+    return response.data
   },
   (error) => {
     // 对响应错误做点什么
     if (error.response) {
-      const { status, config } = error.response
-      logger.error(`API Error: ${config.method?.toUpperCase()} ${config.url} - Status: ${status}`, error)
-      
+      // 处理响应错误
+      const { status } = error.response
       switch (status) {
         case 401:
-          // 未授权，跳转到登录页
-          logger.warn('Unauthorized, redirecting to login page')
+          // 未授权，清除token并跳转到登录页
+          localStorage.removeItem('token')
+          window.location.href = '/login'
           break
         case 403:
-          // 权限不足
-          logger.warn('Permission denied')
+          console.error('没有权限访问该资源')
           break
         case 404:
-          // 请求不存在
-          logger.warn('Resource not found')
+          console.error('请求的资源不存在')
           break
         case 500:
-          // 服务器错误
-          logger.error('Server error', error)
+          console.error('服务器错误:', error.response.data)
           break
         default:
-          logger.error(`Unhandled error status: ${status}`, error)
-          break
+          console.error(`未处理的错误状态: ${status}`, error.response.data)
       }
+    } else if (error.request) {
+      // 请求已经发出，但没有收到响应
+      console.error('网络错误，请检查您的网络连接')
     } else {
-      logger.error('Network Error', error)
+      // 发送请求时出了点问题
+      console.error('请求配置错误:', error.message)
     }
     return Promise.reject(error)
   }
