@@ -59,6 +59,13 @@ const handleLogout = () => {
           >
             个人信息
           </router-link>
+          <router-link
+            to="/users"
+            class="group flex items-center px-2 py-2 text-base font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+            :class="{ 'bg-gray-100 text-gray-900': $route.path === '/user' }"
+          >
+            用户管理
+          </router-link>
           <!-- 后续可以添加更多菜单项 -->
         </nav>
       </div>
