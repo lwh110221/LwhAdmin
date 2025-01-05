@@ -7,3 +7,11 @@ export const AUTH = {
   PROFILE: '/admin/auth/profile',
   PASSWORD: '/admin/auth/password'
 } 
+
+/**
+ * 用户管理接口
+ */
+export const USER = {
+  LIST: '/admin/users',
+  DETAIL: (id) => `/admin/users/${id}`
+} 

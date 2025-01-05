@@ -4,6 +4,8 @@ import AdminLayout from '@/layouts/AdminLayout.vue'
 import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import ProfileView from '@/views/ProfileView.vue'
+import UserList from '@/views/user/UserList.vue'
+import UserDetail from '@/views/user/UserDetail.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,6 +32,26 @@ const router = createRouter({
           meta: { 
             requiresAuth: true,
             title: '个人信息'
+          }
+        },
+        {
+          path: 'users',
+          name: 'user-list',
+          component: UserList,
+          meta: {
+            requiresAuth: true,
+            title: '用户列表',
+            permission: 'user:list'
+          }
+        },
+        {
+          path: 'users/:id',
+          name: 'user-detail',
+          component: UserDetail,
+          meta: {
+            requiresAuth: true,
+            title: '用户详情',
+            permission: 'user:detail'
           }
         }
       ]

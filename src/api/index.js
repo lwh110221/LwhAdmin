@@ -1,9 +1,11 @@
 import http from './http'
 import authService from './services/auth.service'
+import userService from './services/user.service'
 
 export {
   http,
-  authService
+  authService,
+  userService
 }
 
 export * from './endpoints' 
