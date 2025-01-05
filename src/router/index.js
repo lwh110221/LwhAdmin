@@ -8,6 +8,8 @@ import UserList from '@/views/user/UserList.vue'
 import UserDetail from '@/views/user/UserDetail.vue'
 import MomentList from '@/views/moment/MomentList.vue'
 import CategoryList from '@/views/news/CategoryList.vue'
+import ArticleList from '@/views/news/ArticleList.vue'
+import LogList from '@/views/log/LogList.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -74,6 +76,46 @@ const router = createRouter({
             requiresAuth: true,
             title: '新闻分类',
             permission: 'news:category:manage'
+          }
+        },
+        {
+          path: 'news/articles',
+          name: 'news-article-list',
+          component: ArticleList,
+          meta: {
+            requiresAuth: true,
+            title: '新闻文章',
+            permission: 'news:article:manage'
+          }
+        },
+        {
+          path: 'news/articles/create',
+          name: 'news-article-create',
+          component: () => import('@/views/news/ArticleEdit.vue'),
+          meta: {
+            requiresAuth: true,
+            title: '创建文章',
+            permission: 'news:article:manage'
+          }
+        },
+        {
+          path: 'news/articles/:id/edit',
+          name: 'news-article-edit',
+          component: () => import('@/views/news/ArticleEdit.vue'),
+          meta: {
+            requiresAuth: true,
+            title: '编辑文章',
+            permission: 'news:article:manage'
+          }
+        },
+        {
+          path: 'logs',
+          name: 'log-list',
+          component: LogList,
+          meta: {
+            requiresAuth: true,
+            title: '日志管理',
+            permission: 'log:manage'
           }
         }
       ]

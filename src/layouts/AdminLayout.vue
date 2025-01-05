@@ -80,6 +80,20 @@ const handleLogout = () => {
           >
             新闻分类
           </router-link>
+          <router-link
+            to="/news/articles"
+            class="group flex items-center px-2 py-2 text-base font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+            :class="{ 'bg-gray-100 text-gray-900': $route.path.startsWith('/news/articles') }"
+          >
+            新闻文章
+          </router-link>
+          <router-link
+            to="/logs"
+            class="group flex items-center px-2 py-2 text-base font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+            :class="{ 'bg-gray-100 text-gray-900': $route.path.startsWith('/logs') }"
+          >
+            日志管理
+          </router-link>
         </nav>
       </div>
 
