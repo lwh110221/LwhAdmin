@@ -29,24 +29,24 @@ class Logger {
     try {
       await fs.promises.appendFile(this.errorLogFile, message)
     } catch (err) {
-      console.error('Failed to write to log file:', err)
+      console.error('写入日志文件失败:', err)
     }
   }
 
   error(message, error = null) {
-    const logMessage = this.formatMessage('ERROR', message, error)
+    const logMessage = this.formatMessage('错误', message, error)
     this.writeLog(logMessage)
     console.error(message, error)
   }
 
   warn(message) {
-    const logMessage = this.formatMessage('WARN', message)
+    const logMessage = this.formatMessage('警告', message)
     this.writeLog(logMessage)
     console.warn(message)
   }
 
   info(message) {
-    const logMessage = this.formatMessage('INFO', message)
+    const logMessage = this.formatMessage('信息', message)
     this.writeLog(logMessage)
     console.info(message)
   }
