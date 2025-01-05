@@ -3,5 +3,7 @@
  */
 
 export const AUTH = {
-  LOGIN: '/admin/auth/login'
+  LOGIN: '/admin/auth/login',
+  PROFILE: '/admin/auth/profile',
+  PASSWORD: '/admin/auth/password'
 } 

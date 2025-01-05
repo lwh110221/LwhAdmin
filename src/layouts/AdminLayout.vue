@@ -22,10 +22,16 @@ const handleLogout = () => {
               <h1 class="text-xl font-bold">后台管理系统</h1>
             </div>
           </div>
-          <div class="flex items-center">
+          <div class="flex items-center space-x-4">
+            <router-link
+              to="/profile"
+              class="text-gray-600 hover:text-gray-900"
+            >
+              个人信息
+            </router-link>
             <button
               @click="handleLogout"
-              class="ml-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700"
+              class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700"
             >
               退出登录
             </button>
@@ -38,12 +44,20 @@ const handleLogout = () => {
     <div class="flex">
       <!-- 侧边栏 -->
       <div class="w-64 min-h-screen bg-white shadow-sm">
-        <nav class="mt-5 px-2">
+        <nav class="mt-5 px-2 space-y-1">
           <router-link
             to="/"
             class="group flex items-center px-2 py-2 text-base font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+            :class="{ 'bg-gray-100 text-gray-900': $route.path === '/' }"
           >
             首页
+          </router-link>
+          <router-link
+            to="/profile"
+            class="group flex items-center px-2 py-2 text-base font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+            :class="{ 'bg-gray-100 text-gray-900': $route.path === '/profile' }"
+          >
+            个人信息
           </router-link>
           <!-- 后续可以添加更多菜单项 -->
         </nav>

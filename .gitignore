@@ -30,5 +30,6 @@ ADMIN_API.md
 *.njsproj
 *.sln
 *.sw?
+.cursorrules
 
 *.tsbuildinfo
