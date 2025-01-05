@@ -27,3 +27,13 @@ export const MOMENT = {
   DELETE: (id) => `/admin/moments/${id}`,
   STATS: '/admin/moments/stats/overview'
 } 
+
+/**
+ * 新闻分类管理接口
+ */
+export const NEWS_CATEGORY = {
+  LIST: '/admin/news/categories',
+  CREATE: '/admin/news/categories',
+  UPDATE: (id) => `/admin/news/categories/${id}`,
+  DELETE: (id) => `/admin/news/categories/${id}`
+} 

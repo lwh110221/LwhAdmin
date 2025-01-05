@@ -7,6 +7,7 @@ import ProfileView from '@/views/ProfileView.vue'
 import UserList from '@/views/user/UserList.vue'
 import UserDetail from '@/views/user/UserDetail.vue'
 import MomentList from '@/views/moment/MomentList.vue'
+import CategoryList from '@/views/news/CategoryList.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -63,6 +64,16 @@ const router = createRouter({
             requiresAuth: true,
             title: '动态列表',
             permission: 'moment:list'
+          }
+        },
+        {
+          path: 'news/categories',
+          name: 'news-category-list',
+          component: CategoryList,
+          meta: {
+            requiresAuth: true,
+            title: '新闻分类',
+            permission: 'news:category:manage'
           }
         }
       ]
