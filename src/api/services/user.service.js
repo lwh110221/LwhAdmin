@@ -27,5 +27,32 @@ export default {
    */
   getDetail(userId) {
     return http.get(USER.DETAIL(userId))
+  },
+
+  /**
+   * 修改用户状态
+   * @param {number} userId - 用户ID
+   * @param {boolean} status - 状态(true: 正常, false: 禁用)
+   * @returns {Promise} 操作结果
+   */
+  updateStatus(userId, status) {
+    return http.put(USER.UPDATE_STATUS(userId), { status })
+  },
+
+  /**
+   * 删除用户
+   * @param {number} userId - 用户ID
+   * @returns {Promise} 操作结果
+   */
+  deleteUser(userId) {
+    return http.delete(USER.DELETE(userId))
+  },
+
+  /**
+   * 获取用户统计数据
+   * @returns {Promise} 统计数据
+   */
+  getStats() {
+    return http.get(USER.STATS)
   }
 } 

@@ -13,5 +13,17 @@ export const AUTH = {
  */
 export const USER = {
   LIST: '/admin/users',
-  DETAIL: (id) => `/admin/users/${id}`
+  DETAIL: (id) => `/admin/users/${id}`,
+  UPDATE_STATUS: (id) => `/admin/users/${id}/status`,
+  DELETE: (id) => `/admin/users/${id}`,
+  STATS: '/admin/users/stats/overview'
+}
+
+/**
+ * 动态管理接口
+ */
+export const MOMENT = {
+  LIST: '/admin/moments',
+  DELETE: (id) => `/admin/moments/${id}`,
+  STATS: '/admin/moments/stats/overview'
 } 

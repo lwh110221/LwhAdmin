@@ -62,11 +62,17 @@ const handleLogout = () => {
           <router-link
             to="/users"
             class="group flex items-center px-2 py-2 text-base font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-            :class="{ 'bg-gray-100 text-gray-900': $route.path === '/user' }"
+            :class="{ 'bg-gray-100 text-gray-900': $route.path.startsWith('/users') }"
           >
             用户管理
           </router-link>
-          <!-- 后续可以添加更多菜单项 -->
+          <router-link
+            to="/moments"
+            class="group flex items-center px-2 py-2 text-base font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+            :class="{ 'bg-gray-100 text-gray-900': $route.path.startsWith('/moments') }"
+          >
+            动态管理
+          </router-link>
         </nav>
       </div>
 

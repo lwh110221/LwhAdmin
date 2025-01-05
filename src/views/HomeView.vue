@@ -1,16 +1,21 @@
 <script setup>
-import { useAuthStore } from '@/stores/auth'
+import { ref } from 'vue'
+import UserStats from '@/components/user/UserStats.vue'
+import MomentStats from '@/components/moment/MomentStats.vue'
 
-const authStore = useAuthStore()
+// 组件引用，用于调用刷新方法
+const userStatsRef = ref(null)
+const momentStatsRef = ref(null)
 </script>
 
 <template>
-  <div>
-    <h1 class="text-2xl font-bold mb-4">欢迎回来，{{ authStore.admin?.username }}</h1>
-    <div class="bg-white shadow rounded-lg p-6">
-      <p class="text-gray-600">
-        这里是后台管理系统的首页，您可以在左侧菜单中选择要管理的功能。
-      </p>
-    </div>
+  <div class="space-y-6">
+    <h1 class="text-2xl font-bold">控制台</h1>
+    
+    <!-- 用户统计 -->
+    <UserStats ref="userStatsRef" />
+
+    <!-- 动态统计 -->
+    <MomentStats ref="momentStatsRef" />
   </div>
 </template>

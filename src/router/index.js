@@ -6,6 +6,7 @@ import LoginView from '@/views/LoginView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import UserList from '@/views/user/UserList.vue'
 import UserDetail from '@/views/user/UserDetail.vue'
+import MomentList from '@/views/moment/MomentList.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -52,6 +53,16 @@ const router = createRouter({
             requiresAuth: true,
             title: '用户详情',
             permission: 'user:detail'
+          }
+        },
+        {
+          path: 'moments',
+          name: 'moment-list',
+          component: MomentList,
+          meta: {
+            requiresAuth: true,
+            title: '动态列表',
+            permission: 'moment:list'
           }
         }
       ]

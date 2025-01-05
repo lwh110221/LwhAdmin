@@ -83,9 +83,10 @@
                 <img
                   v-for="image in moment.images"
                   :key="image"
-                  :src="image"
+                  :src="getImageUrl(image)"
                   alt="动态图片"
-                  class="w-20 h-20 object-cover rounded"
+                  class="w-20 h-20 object-cover rounded cursor-pointer hover:opacity-90"
+                  @click="openImagePreview(moment.images, image)"
                 >
               </div>
             </div>
@@ -94,6 +95,36 @@
       </div>
       <div v-else class="text-gray-500">
         获取用户信息失败
+      </div>
+    </div>
+
+    <!-- 图片预览模态框 -->
+    <div
+      v-if="showPreview"
+      class="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center"
+      @click="showPreview = false"
+    >
+      <div class="relative max-w-full max-h-full">
+        <img
+          :src="getImageUrl(previewImages[currentPreviewIndex])"
+          class="max-w-full max-h-[90vh] object-contain"
+          alt="预览图片"
+        >
+        <!-- 导航按钮 -->
+        <button
+          v-if="previewImages.length > 1 && currentPreviewIndex > 0"
+          @click.stop="currentPreviewIndex--"
+          class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 rounded-full p-2 hover:bg-opacity-70"
+        >
+          ←
+        </button>
+        <button
+          v-if="previewImages.length > 1 && currentPreviewIndex < previewImages.length - 1"
+          @click.stop="currentPreviewIndex++"
+          class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 rounded-full p-2 hover:bg-opacity-70"
+        >
+          →
+        </button>
       </div>
     </div>
   </div>
@@ -105,6 +136,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useMessage } from '@/composables/useMessage'
 import { userService } from '@/api'
 import { logger } from '@/utils/logger'
+import { getImageUrl } from '@/utils/image'
 
 const router = useRouter()
 const route = useRoute()
@@ -113,6 +145,17 @@ const { showMessage } = useMessage()
 // 用户详情数据
 const userDetail = ref(null)
 const loading = ref(false)
+
+// 图片预览相关
+const showPreview = ref(false)
+const previewImages = ref([])
+const currentPreviewIndex = ref(0)
+
+const openImagePreview = (images, currentImage) => {
+  previewImages.value = images
+  currentPreviewIndex.value = images.indexOf(currentImage)
+  showPreview.value = true
+}
 
 // 格式化日期
 const formatDate = (dateString) => {
@@ -166,5 +209,16 @@ const fetchUserDetail = async () => {
 onMounted(() => {
   logger.info('用户详情页面加载')
   fetchUserDetail()
+})
+
+defineExpose({
+  userDetail,
+  loading,
+  showPreview,
+  previewImages,
+  currentPreviewIndex,
+  openImagePreview,
+  getImageUrl,
+  formatDate
 })
 </script> 

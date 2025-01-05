@@ -63,7 +63,24 @@
     <!-- 用户列表 -->
     <div class="bg-white rounded-lg shadow-md">
       <div class="p-6">
-        <h2 class="text-lg font-medium mb-4">用户列表</h2>
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-medium">用户列表</h2>
+          <!-- 用户统计 -->
+          <div v-if="stats" class="flex space-x-4">
+            <div class="text-sm">
+              <span class="text-gray-500">总用户数：</span>
+              <span class="font-medium">{{ stats.totalUsers }}</span>
+            </div>
+            <div class="text-sm">
+              <span class="text-gray-500">今日新增：</span>
+              <span class="font-medium text-green-600">{{ stats.newUsersToday }}</span>
+            </div>
+            <div class="text-sm">
+              <span class="text-gray-500">本月活跃：</span>
+              <span class="font-medium text-blue-600">{{ stats.activeUsersThisMonth }}</span>
+            </div>
+          </div>
+        </div>
         <!-- 表格 -->
         <div class="overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-200">
@@ -95,22 +112,29 @@
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ user.email }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ user.points }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                  <span
-                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
-                    :class="user.status ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
+                  <button
+                    @click="handleUpdateStatus(user)"
+                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full cursor-pointer"
+                    :class="user.status ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-red-100 text-red-800 hover:bg-red-200'"
                   >
                     {{ user.status ? '正常' : '禁用' }}
-                  </span>
+                  </button>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {{ formatDate(user.created_at) }}
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td class="px-6 py-4 whitespace-nowrap text-sm space-x-2">
                   <button
                     @click="viewDetail(user.id)"
                     class="text-blue-600 hover:text-blue-900"
                   >
                     查看
+                  </button>
+                  <button
+                    @click="handleDelete(user)"
+                    class="text-red-600 hover:text-red-900"
+                  >
+                    删除
                   </button>
                 </td>
               </tr>
@@ -176,6 +200,9 @@ const pagination = ref({
   total: 0
 })
 
+// 统计数据
+const stats = ref(null)
+
 // 计算是否有下一页
 const hasNextPage = computed(() => {
   return pagination.value.page * pagination.value.limit < pagination.value.total
@@ -197,6 +224,23 @@ const formatDate = (dateString) => {
   } catch (error) {
     logger.error('日期格式化错误', error)
     return '日期格式错误'
+  }
+}
+
+// 获取用户统计数据
+const fetchStats = async () => {
+  try {
+    logger.info('开始获取用户统计数据')
+    const response = await userService.getStats()
+
+    if (response?.code === 200) {
+      stats.value = response.data
+      logger.info('获取用户统计数据成功', stats.value)
+    } else {
+      logger.warn('获取用户统计数据失败', response?.message)
+    }
+  } catch (error) {
+    logger.error('获取用户统计数据失败', error)
   }
 }
 
@@ -237,6 +281,55 @@ const fetchUserList = async (searchParams = {}) => {
     })
   } finally {
     loading.value = false
+  }
+}
+
+// 修改用户状态
+const handleUpdateStatus = async (user) => {
+  try {
+    logger.info('开始修改用户状态', { userId: user.id, currentStatus: user.status })
+    // 切换状态（true -> false 或 false -> true）
+    const newStatus = !user.status
+    const response = await userService.updateStatus(user.id, newStatus)
+
+    if (response?.code === 200) {
+      user.status = newStatus
+      showMessage('状态修改成功', 'success')
+      logger.info('修改用户状态成功', { userId: user.id, newStatus })
+    } else {
+      showMessage(response?.message || '状态修改失败', 'error')
+      logger.warn('修改用户状态失败', response?.message)
+    }
+  } catch (error) {
+    showMessage('状态修改失败', 'error')
+    logger.error('修改用户状态失败', error)
+  }
+}
+
+// 删除用户
+const handleDelete = async (user) => {
+  if (!confirm(`确定要删除用户 "${user.username}" 吗？`)) {
+    return
+  }
+
+  try {
+    logger.info('开始删除用户', { userId: user.id })
+    const response = await userService.deleteUser(user.id)
+
+    if (response?.code === 200) {
+      showMessage('删除成功', 'success')
+      logger.info('删除用户成功', { userId: user.id })
+      // 重新加载列表
+      fetchUserList()
+      // 重新获取统计数据
+      fetchStats()
+    } else {
+      showMessage(response?.message || '删除失败', 'error')
+      logger.warn('删除用户失败', response?.message)
+    }
+  } catch (error) {
+    showMessage('删除失败', 'error')
+    logger.error('删除用户失败', error)
   }
 }
 
@@ -287,9 +380,10 @@ const viewDetail = (userId) => {
   router.push(`/users/${userId}`)
 }
 
-// 页面加载时获取列表
+// 页面加载时获取列表和统计数据
 onMounted(() => {
   logger.info('用户列表页面加载')
   fetchUserList()
+  fetchStats()
 })
 </script> 
