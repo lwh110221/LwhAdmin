@@ -9,7 +9,6 @@ import UserDetail from '@/views/user/UserDetail.vue'
 import MomentList from '@/views/moment/MomentList.vue'
 import CategoryList from '@/views/news/CategoryList.vue'
 import ArticleList from '@/views/news/ArticleList.vue'
-import LogList from '@/views/log/LogList.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -109,13 +108,56 @@ const router = createRouter({
           }
         },
         {
-          path: 'logs',
-          name: 'log-list',
-          component: LogList,
+          path: 'identities/certifications',
+          name: 'identity-certification-list',
+          component: () => import('@/views/identity/CertificationList.vue'),
           meta: {
             requiresAuth: true,
-            title: '日志管理',
-            permission: 'log:manage'
+            title: '身份认证管理',
+            permission: 'identity:certification:list'
+          }
+        },
+        {
+          path: 'identities/stats',
+          name: 'identity-stats',
+          component: () => import('@/views/identity/IdentityStats.vue'),
+          meta: {
+            requiresAuth: true,
+            title: '身份统计信息',
+            permission: 'identity:stats'
+          }
+        },
+        {
+          path: 'admins/list',
+          name: 'admin-list',
+          component: () => import('@/views/admin/AdminList.vue'),
+          meta: {
+            requiresAuth: true,
+            title: '管理员列表',
+            permission: 'admin:list',
+            roles: ['super_admin'] // 仅超级管理员可访问
+          }
+        },
+        {
+          path: 'roles',
+          name: 'role-list',
+          component: () => import('@/views/role/RoleList.vue'),
+          meta: {
+            requiresAuth: true,
+            title: '角色管理',
+            permission: 'admin:list',
+            roles: ['super_admin'] // 仅超级管理员可访问
+          }
+        },
+        {
+          path: 'roles/:id',
+          name: 'role-detail',
+          component: () => import('@/views/role/RoleDetail.vue'),
+          meta: {
+            requiresAuth: true,
+            title: '角色详情',
+            permission: 'admin:list',
+            roles: ['super_admin'] // 仅超级管理员可访问
           }
         }
       ]
@@ -131,6 +173,23 @@ router.beforeEach((to, from, next) => {
     next('/login')
   } else if (to.path === '/login' && authStore.isAuthenticated()) {
     next('/')
+  } else if (to.meta.roles && Array.isArray(to.meta.roles)) {
+    // 检查角色权限
+    const hasRole = to.meta.roles.some(requiredRole => {
+      if (!authStore.admin?.roles) return false
+      
+      return authStore.admin.roles.some(userRole => 
+        typeof userRole === 'string'
+          ? userRole === requiredRole
+          : userRole.name === '超级管理员' || userRole.code === requiredRole
+      )
+    })
+    
+    if (!hasRole) {
+      next('/') // 没有权限，跳转首页
+    } else {
+      next()
+    }
   } else {
     next()
   }

@@ -3,7 +3,9 @@ import authService from './services/auth.service'
 import userService from './services/user.service'
 import momentService from './services/moment.service'
 import newsService from './services/news.service'
-import logService from './services/log.service'
+import identityService from './services/identity.service'
+import adminService from './services/admin.service'
+import roleService from './services/role.service'
 
 export {
   http,
@@ -11,7 +13,9 @@ export {
   userService,
   momentService,
   newsService,
-  logService
+  identityService,
+  adminService,
+  roleService
 }
 
 export * from './endpoints' 

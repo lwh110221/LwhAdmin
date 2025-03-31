@@ -53,10 +53,34 @@ export const NEWS_ARTICLE = {
 } 
 
 /**
- * 日志管理接口
+ * 身份认证管理接口
  */
-export const LOG = {
-  LIST: '/admin/logs',
-  STATS: '/admin/logs/stats',
-  CLEAN: '/admin/logs/clean'
+export const IDENTITY = {
+  CERTIFICATION_LIST: '/admin/identities/certifications',
+  CERTIFICATION_REVIEW: (id) => `/admin/identities/certifications/${id}/review`,
+  STATS: '/admin/identities/stats'
+} 
+
+/**
+ * 管理员管理接口
+ */
+export const ADMIN_MANAGE = {
+  LIST: '/admin/admins',
+  CREATE: '/admin/admins',
+  UPDATE_STATUS: (id) => `/admin/admins/${id}/status`,
+  UPDATE_ROLES: (id) => `/admin/admins/${id}/roles`,
+  DELETE: (id) => `/admin/admins/${id}`
+}
+
+/**
+ * 角色管理接口
+ */
+export const ROLE = {
+  LIST: '/admin/roles',
+  DETAIL: (id) => `/admin/roles/${id}`,
+  CREATE: '/admin/roles',
+  UPDATE: (id) => `/admin/roles/${id}`,
+  DELETE: (id) => `/admin/roles/${id}`,
+  UPDATE_PERMISSIONS: (id) => `/admin/roles/${id}/permissions`,
+  ALL_PERMISSIONS: '/admin/roles/permissions'
 } 
