@@ -1,9 +1,11 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
+  <div class="space-y-6">
+    <h1 class="text-xl sm:text-2xl font-bold">用户管理</h1>
+
     <!-- 搜索表单 -->
-    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+    <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
       <h2 class="text-lg font-medium mb-4">搜索条件</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <!-- 用户名 -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">用户名</label>
@@ -62,11 +64,11 @@
 
     <!-- 用户列表 -->
     <div class="bg-white rounded-lg shadow-md">
-      <div class="p-6">
-        <div class="flex justify-between items-center mb-4">
+      <div class="p-4 sm:p-6">
+        <div class="flex flex-col sm:flex-row justify-between sm:items-center mb-4 space-y-2 sm:space-y-0">
           <h2 class="text-lg font-medium">用户列表</h2>
           <!-- 用户统计 -->
-          <div v-if="stats" class="flex space-x-4">
+          <div v-if="stats" class="flex flex-wrap gap-2 sm:gap-4">
             <div class="text-sm">
               <span class="text-gray-500">总用户数：</span>
               <span class="font-medium">{{ stats.totalUsers }}</span>
@@ -81,72 +83,49 @@
             </div>
           </div>
         </div>
-        <!-- 表格 -->
-        <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-              <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">用户名</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">邮箱</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">积分</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">创建时间</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <tr v-if="loading" class="animate-pulse">
-                <td colspan="7" class="px-6 py-4 text-center text-gray-500">
-                  加载中...
-                </td>
-              </tr>
-              <tr v-else-if="!userList.length" class="hover:bg-gray-50">
-                <td colspan="7" class="px-6 py-4 text-center text-gray-500">
-                  暂无数据
-                </td>
-              </tr>
-              <tr v-for="user in userList" :key="user.id" class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ user.id }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ user.username }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ user.email }}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ user.points }}</td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <button
-                    @click="handleUpdateStatus(user)"
-                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full cursor-pointer"
-                    :class="user.status ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-red-100 text-red-800 hover:bg-red-200'"
-                  >
-                    {{ user.status ? '正常' : '禁用' }}
-                  </button>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {{ formatDate(user.created_at) }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm space-x-2">
-                  <button
-                    @click="viewDetail(user.id)"
-                    class="text-blue-600 hover:text-blue-900"
-                  >
-                    查看
-                  </button>
-                  <button
-                    @click="handleDelete(user)"
-                    class="text-red-600 hover:text-red-900"
-                  >
-                    删除
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        
+        <!-- 响应式表格 -->
+        <ResponsiveTable
+          :columns="columns"
+          :items="userList"
+          :loading="loading"
+        >
+          <!-- 自定义状态列 -->
+          <template #status="{ item }">
+            <button
+              @click="handleUpdateStatus(item)"
+              class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full cursor-pointer"
+              :class="item.status ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-red-100 text-red-800 hover:bg-red-200'"
+            >
+              {{ item.status ? '正常' : '禁用' }}
+            </button>
+          </template>
+          
+          <!-- 自定义操作列 -->
+          <template #actions="{ item }">
+            <div class="space-x-2">
+              <button
+                @click="viewDetail(item.id)"
+                class="text-blue-600 hover:text-blue-900"
+              >
+                查看
+              </button>
+              <button
+                @click="handleDelete(item)"
+                class="text-red-600 hover:text-red-900"
+              >
+                删除
+              </button>
+            </div>
+          </template>
+        </ResponsiveTable>
+        
         <!-- 分页 -->
-        <div class="mt-4 flex justify-between items-center">
+        <div class="mt-4 flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
           <div class="text-sm text-gray-700">
             共 {{ pagination.total }} 条记录
           </div>
-          <div class="flex justify-end space-x-2">
+          <div class="flex justify-center sm:justify-end space-x-2">
             <button
               @click="handlePageChange(pagination.page - 1)"
               :disabled="pagination.page <= 1"
@@ -179,6 +158,7 @@ import { useRouter } from 'vue-router'
 import { useMessage } from '@/composables/useMessage'
 import { userService } from '@/api'
 import { logger } from '@/utils/logger'
+import ResponsiveTable from '@/components/common/ResponsiveTable.vue'
 
 const router = useRouter()
 const { showMessage } = useMessage()
@@ -202,6 +182,24 @@ const pagination = ref({
 
 // 统计数据
 const stats = ref(null)
+
+// 表格列定义
+const columns = [
+  { key: 'id', label: 'ID' },
+  { key: 'username', label: '用户名' },
+  { key: 'email', label: '邮箱' },
+  { key: 'points', label: '积分' },
+  { 
+    key: 'status', 
+    label: '状态',
+  },
+  { 
+    key: 'created_at', 
+    label: '创建时间',
+    formatter: (item) => formatDate(item.created_at)
+  },
+  { key: 'actions', label: '操作' }
+]
 
 // 计算是否有下一页
 const hasNextPage = computed(() => {

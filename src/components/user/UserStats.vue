@@ -1,22 +1,22 @@
 <template>
-  <div class="bg-white rounded-lg shadow-md p-6">
-    <h2 class="text-lg font-medium mb-6">用户统计</h2>
+  <div class="bg-white rounded-lg shadow-md p-4 sm:p-6">
+    <h2 class="text-lg font-medium mb-4 sm:mb-6">用户统计</h2>
     
     <!-- 加载状态 -->
     <div v-if="loading" class="space-y-4">
-      <div class="animate-pulse grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="animate-pulse grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <div v-for="i in 3" :key="i" class="bg-gray-100 rounded-lg p-4 h-24"></div>
       </div>
     </div>
 
     <!-- 统计数据 -->
-    <div v-else-if="stats" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div v-else-if="stats" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       <!-- 总用户数 -->
       <div class="bg-blue-50 rounded-lg p-4">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm text-blue-600 font-medium">总用户数</p>
-            <p class="mt-2 text-3xl font-bold text-blue-800">{{ stats.totalUsers }}</p>
+            <p class="mt-2 text-2xl sm:text-3xl font-bold text-blue-800">{{ stats.totalUsers }}</p>
           </div>
           <div class="bg-blue-100 rounded-full p-3">
             <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -32,7 +32,7 @@
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm text-green-600 font-medium">今日新增</p>
-            <p class="mt-2 text-3xl font-bold text-green-800">{{ stats.newUsersToday }}</p>
+            <p class="mt-2 text-2xl sm:text-3xl font-bold text-green-800">{{ stats.newUsersToday }}</p>
           </div>
           <div class="bg-green-100 rounded-full p-3">
             <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -48,7 +48,7 @@
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm text-purple-600 font-medium">本月活跃</p>
-            <p class="mt-2 text-3xl font-bold text-purple-800">{{ stats.activeUsersThisMonth }}</p>
+            <p class="mt-2 text-2xl sm:text-3xl font-bold text-purple-800">{{ stats.activeUsersThisMonth }}</p>
           </div>
           <div class="bg-purple-100 rounded-full p-3">
             <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -62,7 +62,12 @@
 
     <!-- 错误状态 -->
     <div v-else class="text-center text-gray-500 py-4">
-      获取统计数据失败
+      <button
+        @click="fetchStats"
+        class="mt-2 px-3 py-1.5 bg-gray-200 text-gray-700 rounded-md text-sm hover:bg-gray-300 focus:outline-none"
+      >
+        重新加载
+      </button>
     </div>
   </div>
 </template>

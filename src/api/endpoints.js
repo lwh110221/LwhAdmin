@@ -58,7 +58,12 @@ export const NEWS_ARTICLE = {
 export const IDENTITY = {
   CERTIFICATION_LIST: '/admin/identities/certifications',
   CERTIFICATION_REVIEW: (id) => `/admin/identities/certifications/${id}/review`,
-  STATS: '/admin/identities/stats'
+  STATS: '/admin/identities/stats',
+  // 身份类型管理接口
+  TYPE_LIST: '/admin/identities/types',
+  TYPE_CREATE: '/admin/identities/types',
+  TYPE_UPDATE: (code) => `/admin/identities/types/${code}`,
+  TYPE_DELETE: (code) => `/admin/identities/types/${code}`
 } 
 
 /**

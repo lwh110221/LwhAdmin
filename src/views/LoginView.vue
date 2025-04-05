@@ -36,12 +36,15 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-100">
-    <div class="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow">
+  <div class="min-h-screen flex items-center justify-center bg-gray-100 px-4 sm:px-6">
+    <div class="max-w-md w-full space-y-8 p-6 sm:p-8 bg-white rounded-lg shadow">
       <div>
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 class="mt-4 text-center text-2xl sm:text-3xl font-extrabold text-gray-900">
           后台管理系统
         </h2>
+        <p class="mt-2 text-center text-sm text-gray-600">
+          管理员登录
+        </p>
       </div>
       <form class="mt-8 space-y-6" @submit.prevent="handleLogin">
         <div class="rounded-md shadow-sm -space-y-px">
@@ -84,6 +87,12 @@ const handleLogin = async () => {
           </button>
         </div>
       </form>
+
+      <div class="mt-4">
+        <div class="text-center text-xs text-gray-500">
+          &copy; {{ new Date().getFullYear() }} 系统管理平台 版本 1.0.0
+        </div>
+      </div>
     </div>
   </div>
 </template> 

@@ -33,8 +33,61 @@ export const getIdentityStats = () => {
   return http.get(IDENTITY.STATS)
 }
 
+/**
+ * 获取所有身份类型
+ * @returns {Promise<Object>} 身份类型列表
+ */
+export const getIdentityTypes = () => {
+  return http.get(IDENTITY.TYPE_LIST)
+}
+
+/**
+ * 创建身份类型
+ * @param {Object} data - 身份类型数据
+ * @param {string} data.code - 身份类型代码
+ * @param {string} data.name - 身份类型名称
+ * @param {boolean} [data.isDefault] - 是否为默认身份
+ * @param {boolean} [data.needCertification] - 是否需要认证
+ * @param {number} [data.validityDays] - 认证有效期(天)
+ * @param {string[]} [data.requiredFields] - 认证所需字段
+ * @param {string} [data.description] - 认证要求描述
+ * @returns {Promise<Object>} 创建结果
+ */
+export const createIdentityType = (data) => {
+  return http.post(IDENTITY.TYPE_CREATE, data)
+}
+
+/**
+ * 更新身份类型
+ * @param {string} code - 身份类型代码
+ * @param {Object} data - 更新数据
+ * @param {string} [data.name] - 身份类型名称
+ * @param {boolean} [data.isDefault] - 是否为默认身份
+ * @param {boolean} [data.needCertification] - 是否需要认证
+ * @param {number} [data.validityDays] - 认证有效期(天)
+ * @param {string[]} [data.requiredFields] - 认证所需字段
+ * @param {string} [data.description] - 认证要求描述
+ * @returns {Promise<Object>} 更新结果
+ */
+export const updateIdentityType = (code, data) => {
+  return http.put(IDENTITY.TYPE_UPDATE(code), data)
+}
+
+/**
+ * 删除身份类型
+ * @param {string} code - 身份类型代码
+ * @returns {Promise<Object>} 删除结果
+ */
+export const deleteIdentityType = (code) => {
+  return http.delete(IDENTITY.TYPE_DELETE(code))
+}
+
 export default {
   getCertifications,
   reviewCertification,
-  getIdentityStats
+  getIdentityStats,
+  getIdentityTypes,
+  createIdentityType,
+  updateIdentityType,
+  deleteIdentityType
 } 

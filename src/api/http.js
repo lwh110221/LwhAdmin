@@ -3,7 +3,7 @@ import axios from 'axios'
 // 创建axios实例
 const http = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  timeout: 15000,
+  timeout: 30000, // 增加超时时间到30秒
   withCredentials: true, // 允许跨域携带cookie
   headers: {
     'Content-Type': 'application/json'
@@ -61,10 +61,12 @@ http.interceptors.response.use(
       }
     } else if (error.request) {
       // 请求已经发出，但没有收到响应
-      console.error('网络错误，请检查您的网络连接')
+      console.error('网络错误，请检查您的网络连接或服务器状态', error)
+      // 将详细错误信息添加到错误对象，方便调试
+      error.message = '网络错误，请检查您的网络连接或稍后重试'
     } else {
       // 发送请求时出了点问题
-      console.error('请求配置错误:', error.message)
+      console.error('请求配置错误:', error.message, error)
     }
     return Promise.reject(error)
   }

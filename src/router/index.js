@@ -128,6 +128,16 @@ const router = createRouter({
           }
         },
         {
+          path: 'identities/types',
+          name: 'identity-type-list',
+          component: () => import('@/views/identity/TypeList.vue'),
+          meta: {
+            requiresAuth: true,
+            title: '身份类型管理',
+            permission: 'identity:type:manage'
+          }
+        },
+        {
           path: 'admins/list',
           name: 'admin-list',
           component: () => import('@/views/admin/AdminList.vue'),
