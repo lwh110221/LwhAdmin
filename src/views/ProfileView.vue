@@ -39,82 +39,108 @@
             </span>
           </div>
         </div>
+        <!-- 修改密码按钮 -->
+        <div class="mt-6">
+          <button
+            @click="showPasswordModal = true"
+            class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          >
+            修改密码
+          </button>
+        </div>
       </div>
       <div v-else class="text-gray-500">加载中...</div>
     </div>
 
-    <!-- 修改密码卡片 -->
-    <div class="bg-white rounded-lg shadow-md p-6">
-      <h2 class="text-2xl font-bold mb-6">修改密码</h2>
-      <form @submit.prevent="handleUpdatePassword" class="space-y-6 max-w-md">
-        <!-- 原密码 -->
-        <div>
-          <label for="oldPassword" class="block text-sm font-medium text-gray-700 mb-2">
-            原密码
-          </label>
-          <input
-            id="oldPassword"
-            v-model="passwordForm.oldPassword"
-            type="password"
-            required
-            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            :class="{'border-red-500': errors.oldPassword}"
-          />
-          <p v-if="errors.oldPassword" class="mt-1 text-sm text-red-600">
-            {{ errors.oldPassword }}
-          </p>
-        </div>
-
-        <!-- 新密码 -->
-        <div>
-          <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-2">
-            新密码
-          </label>
-          <input
-            id="newPassword"
-            v-model="passwordForm.newPassword"
-            type="password"
-            required
-            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            :class="{'border-red-500': errors.newPassword}"
-          />
-          <p v-if="errors.newPassword" class="mt-1 text-sm text-red-600">
-            {{ errors.newPassword }}
-          </p>
-          <p class="mt-1 text-sm text-gray-500">
-            密码必须包含大小写字母和数字，长度6-20位
-          </p>
-        </div>
-
-        <!-- 确认新密码 -->
-        <div>
-          <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">
-            确认新密码
-          </label>
-          <input
-            id="confirmPassword"
-            v-model="passwordForm.confirmPassword"
-            type="password"
-            required
-            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            :class="{'border-red-500': errors.confirmPassword}"
-          />
-          <p v-if="errors.confirmPassword" class="mt-1 text-sm text-red-600">
-            {{ errors.confirmPassword }}
-          </p>
-        </div>
-
-        <!-- 提交按钮 -->
-        <div>
-          <button
-            type="submit"
-            class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            :disabled="isSubmitting"
-          >
-            {{ isSubmitting ? '提交中...' : '修改密码' }}
+    <!-- 修改密码模态框 -->
+    <div v-if="showPasswordModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md m-4">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold">修改密码</h2>
+          <button @click="showPasswordModal = false" class="text-gray-500 hover:text-gray-700">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         </div>
-      </form>
+        
+        <form @submit.prevent="handleUpdatePassword" class="space-y-6">
+          <!-- 原密码 -->
+          <div>
+            <label for="oldPassword" class="block text-sm font-medium text-gray-700 mb-2">
+              原密码
+            </label>
+            <input
+              id="oldPassword"
+              v-model="passwordForm.oldPassword"
+              type="password"
+              required
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              :class="{'border-red-500': errors.oldPassword}"
+            />
+            <p v-if="errors.oldPassword" class="mt-1 text-sm text-red-600">
+              {{ errors.oldPassword }}
+            </p>
+          </div>
+
+          <!-- 新密码 -->
+          <div>
+            <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-2">
+              新密码
+            </label>
+            <input
+              id="newPassword"
+              v-model="passwordForm.newPassword"
+              type="password"
+              required
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              :class="{'border-red-500': errors.newPassword}"
+            />
+            <p v-if="errors.newPassword" class="mt-1 text-sm text-red-600">
+              {{ errors.newPassword }}
+            </p>
+            <p class="mt-1 text-sm text-gray-500">
+              密码必须包含大小写字母和数字，长度6-20位
+            </p>
+          </div>
+
+          <!-- 确认新密码 -->
+          <div>
+            <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">
+              确认新密码
+            </label>
+            <input
+              id="confirmPassword"
+              v-model="passwordForm.confirmPassword"
+              type="password"
+              required
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              :class="{'border-red-500': errors.confirmPassword}"
+            />
+            <p v-if="errors.confirmPassword" class="mt-1 text-sm text-red-600">
+              {{ errors.confirmPassword }}
+            </p>
+          </div>
+
+          <!-- 提交按钮 -->
+          <div class="flex gap-4">
+            <button
+              type="button"
+              class="flex-1 py-2 px-4 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+              @click="showPasswordModal = false"
+            >
+              取消
+            </button>
+            <button
+              type="submit"
+              class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              :disabled="isSubmitting"
+            >
+              {{ isSubmitting ? '提交中...' : '确认修改' }}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -129,6 +155,9 @@ import { logger } from '@/utils/logger'
 
 // 获取 auth store
 const authStore = useAuthStore()
+
+// 控制密码模态框显示
+const showPasswordModal = ref(false)
 
 // 密码表单
 const passwordForm = ref({
@@ -231,6 +260,8 @@ const handleUpdatePassword = async () => {
         newPassword: '',
         confirmPassword: ''
       }
+      // 关闭模态框
+      showPasswordModal.value = false
     } else {
       const errorMsg = response?.message || '密码修改失败'
       logger.warn('密码修改失败', errorMsg)
@@ -253,4 +284,4 @@ onMounted(() => {
   logger.info('个人信息页面加载')
   fetchProfile()
 })
-</script> 
+</script>

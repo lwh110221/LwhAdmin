@@ -89,3 +89,21 @@ export const ROLE = {
   UPDATE_PERMISSIONS: (id) => `/admin/roles/${id}/permissions`,
   ALL_PERMISSIONS: '/admin/roles/permissions'
 } 
+
+/**
+ * 产品分类管理接口
+ */
+export const PRODUCT_CATEGORY = {
+  LIST: '/admin/product/categories',
+  CREATE: '/admin/product/categories',
+  DELETE: (id) => `/admin/product/categories/${id}`
+}
+
+/**
+ * 产品管理接口
+ */
+export const PRODUCT = {
+  LIST: '/admin/product/products',
+  UPDATE_STATUS: (id) => `/admin/product/products/${id}/status`,
+  DELETE: (id) => `/admin/product/products/${id}`
+} 

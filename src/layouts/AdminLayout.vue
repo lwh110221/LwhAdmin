@@ -16,6 +16,8 @@ const userExpanded = ref(false)
 const identityExpanded = ref(false)
 // 控制管理员管理子菜单的展开收起
 const adminExpanded = ref(false)
+// 控制产品管理子菜单的展开收起
+const productExpanded = ref(false)
 // 屏幕尺寸
 const screenWidth = ref(window.innerWidth)
 // 是否为移动设备
@@ -63,6 +65,11 @@ const isInAdminPages = computed(() => {
   return router.currentRoute.value.path.startsWith('/admins')
 })
 
+// 判断当前是否在产品管理相关页面
+const isInProductPages = computed(() => {
+  return router.currentRoute.value.path.startsWith('/product')
+})
+
 // 判断当前用户是否是超级管理员
 const isSuperAdmin = computed(() => {
   if (!authStore.admin || !authStore.admin.roles) return false
@@ -88,6 +95,10 @@ if (isInIdentityPages.value) {
 
 if (isInAdminPages.value) {
   adminExpanded.value = true
+}
+
+if (isInProductPages.value) {
+  productExpanded.value = true
 }
 
 const handleLogout = () => {
@@ -191,7 +202,7 @@ const handleMenuClick = () => {
             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3 h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
-            个人信息
+            账号信息
           </router-link>
           
           <!-- 用户管理 -->
@@ -235,6 +246,51 @@ const handleMenuClick = () => {
                 :class="{ 'bg-gray-100 text-gray-900': $route.path.startsWith('/moments') }"
               >
                 动态管理
+              </router-link>
+            </div>
+          </div>
+          
+          <!-- 产品管理 -->
+          <div class="space-y-1">
+            <button
+              @click="productExpanded = !productExpanded"
+              class="w-full group flex items-center justify-between px-2 py-2 text-base font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+              :class="{ 'bg-gray-100 text-gray-900': isInProductPages }"
+            >
+              <span class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="mr-3 h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+                产品管理
+              </span>
+              <svg 
+                class="h-5 w-5 transform transition-transform duration-200" 
+                :class="{ 'rotate-180': productExpanded }"
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 20 20" 
+                fill="currentColor"
+              >
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+            
+            <!-- 产品管理子菜单 -->
+            <div v-if="productExpanded" class="pl-10 space-y-1">
+              <router-link
+                to="/product/categories"
+                @click="handleMenuClick"
+                class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                :class="{ 'bg-gray-100 text-gray-900': $route.path.startsWith('/product/categories') }"
+              >
+                产品分类
+              </router-link>
+              <router-link
+                to="/product/products"
+                @click="handleMenuClick"
+                class="group flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                :class="{ 'bg-gray-100 text-gray-900': $route.path.startsWith('/product/products') }"
+              >
+                产品列表
               </router-link>
             </div>
           </div>

@@ -169,6 +169,26 @@ const router = createRouter({
             permission: 'admin:list',
             roles: ['super_admin'] // 仅超级管理员可访问
           }
+        },
+        {
+          path: 'product/categories',
+          name: 'product-category-list',
+          component: () => import('@/views/product/CategoryList.vue'),
+          meta: {
+            requiresAuth: true,
+            title: '产品分类',
+            permission: 'product:category:view'
+          }
+        },
+        {
+          path: 'product/products',
+          name: 'product-list',
+          component: () => import('@/views/product/ProductList.vue'),
+          meta: {
+            requiresAuth: true,
+            title: '产品列表',
+            permission: 'product:view'
+          }
         }
       ]
     }

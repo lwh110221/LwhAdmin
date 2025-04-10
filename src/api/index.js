@@ -6,6 +6,7 @@ import newsService from './services/news.service'
 import identityService from './services/identity.service'
 import adminService from './services/admin.service'
 import roleService from './services/role.service'
+import productService from './services/product.service'
 
 export {
   http,
@@ -15,7 +16,8 @@ export {
   newsService,
   identityService,
   adminService,
-  roleService
+  roleService,
+  productService
 }
 
 export * from './endpoints' 
